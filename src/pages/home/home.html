@@ -1,4 +1,4 @@
-<ion-header>
+<!-- <ion-header>
   <ion-navbar>
     <ion-title>
       Ionic Blank
@@ -11,4 +11,11 @@
   <p>
     If you get lost, the <a href="http://ionicframework.com/docs/v2">docs</a> will be your guide.
   </p>
+</ion-content> -->
+
+
+<ion-content>
+  <ion-list>
+    <ion-item text-wrap class="message" *ngFor="let message of globalMessages">{{ message }}</ion-item>
+  </ion-list>
 </ion-content>

@@ -7,8 +7,12 @@ import { NavController } from 'ionic-angular';
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController) {
+  globalMessages: string[] = [];
 
+  constructor(public navCtrl: NavController) {
+    this.globalMessages.push("8 beds available in the shelter on Queen's Street");
+    this.globalMessages.push("Small and large jumpers available");
+    this.globalMessages.push("Some other message");
   }
 
 }
