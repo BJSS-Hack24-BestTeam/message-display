@@ -276,7 +276,7 @@ var RiddleProvider = (function () {
         headers.append('Access-Control-Allow-Origin', '*');
         headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
         headers.append('Accept', 'application/json');
-        return this.http.get(this.riddleApi + answers.join(","), { headers: headers });
+        return this.http.get(this.riddleAnswerApi + answers.join(","), { headers: headers });
     };
     RiddleProvider = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
