@@ -48,26 +48,44 @@ export class HomePage {
 
             this.personalMessages = [];
             const personId = message["personId"];
+            const isEasterEggPlayer = message["isEasterEggPlayer"]
 
-            this.personalMessageProvider.getPersonalMessages(personId)
-              .subscribe((messages: any[]) => {
-                
-                for(const msg of messages) {
-                  this.personalMessages.push(msg["theMessage"]);
-                }
+            if (isEasterEggPlayer) {
+              this.playEasterEggGame();
+            }
+            else {
+              this.personalMessageProvider.getPersonalMessages(personId)
+                .subscribe((messages: any[]) => {
+                  
+                  for(const msg of messages) {
+                    this.personalMessages.push(msg["theMessage"]);
+                  }
 
-                this.pause = true;
-                
-                const pauseObs = TimerObservable.create(20000).subscribe(() => {
-                  this.pause = false;
-                  pauseObs.unsubscribe();
+                  this.pause = true;
+                  
+                  const pauseObs = TimerObservable.create(20000).subscribe(() => {
+                    this.pause = false;
+                    pauseObs.unsubscribe();
+                  });
                 });
-              });
+            }
           },
          (err) => {
            console.log(err);
            this.personalMessages = [];
          } );
       });
+  }
+
+  playEasterEggGame(): any {
+    this.globalMessages.push("Looks like you are playing the Easter Egg game!!");
+    this.globalMessages.pop();
+
+    this.pause = true;
+                  
+    const pauseObs = TimerObservable.create(20000).subscribe(() => {
+      this.pause = false;
+      pauseObs.unsubscribe();
+    });
   }
 }

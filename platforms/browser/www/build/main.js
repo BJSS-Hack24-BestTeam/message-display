@@ -93,22 +93,38 @@ var HomePage = (function () {
                 }
                 _this.personalMessages = [];
                 var personId = message["personId"];
-                _this.personalMessageProvider.getPersonalMessages(personId)
-                    .subscribe(function (messages) {
-                    for (var _i = 0, messages_1 = messages; _i < messages_1.length; _i++) {
-                        var msg = messages_1[_i];
-                        _this.personalMessages.push(msg["theMessage"]);
-                    }
-                    _this.pause = true;
-                    var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
-                        _this.pause = false;
-                        pauseObs.unsubscribe();
+                var isEasterEggPlayer = message["isEasterEggPlayer"];
+                if (isEasterEggPlayer) {
+                    _this.playEasterEggGame();
+                }
+                else {
+                    _this.personalMessageProvider.getPersonalMessages(personId)
+                        .subscribe(function (messages) {
+                        for (var _i = 0, messages_1 = messages; _i < messages_1.length; _i++) {
+                            var msg = messages_1[_i];
+                            _this.personalMessages.push(msg["theMessage"]);
+                        }
+                        _this.pause = true;
+                        var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
+                            _this.pause = false;
+                            pauseObs.unsubscribe();
+                        });
                     });
-                });
+                }
             }, function (err) {
                 console.log(err);
                 _this.personalMessages = [];
             });
+        });
+    };
+    HomePage.prototype.playEasterEggGame = function () {
+        var _this = this;
+        this.globalMessages.push("Looks like you are playing the Easter Egg game!!");
+        this.globalMessages.pop();
+        this.pause = true;
+        var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
+            _this.pause = false;
+            pauseObs.unsubscribe();
         });
     };
     HomePage = __decorate([
