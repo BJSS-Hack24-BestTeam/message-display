@@ -48,9 +48,9 @@ export class HomePage {
 
             this.personalMessages = [];
             const personId = message["personId"];
-            const isEasterEggPlayer = message["isEasterEggPlayer"]
+            const isEasterEggPlayer = !!message["isEasterEggPlayer"]
 
-            if (isEasterEggPlayer) {
+            if (isEasterEggPlayer === true) {
               this.playEasterEggGame();
             }
             else {

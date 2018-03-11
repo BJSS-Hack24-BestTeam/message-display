@@ -93,8 +93,8 @@ var HomePage = (function () {
                 }
                 _this.personalMessages = [];
                 var personId = message["personId"];
-                var isEasterEggPlayer = message["isEasterEggPlayer"];
-                if (isEasterEggPlayer) {
+                var isEasterEggPlayer = !!message["isEasterEggPlayer"];
+                if (isEasterEggPlayer === true) {
                     _this.playEasterEggGame();
                 }
                 else {
