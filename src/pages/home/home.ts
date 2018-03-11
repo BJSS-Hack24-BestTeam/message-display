@@ -27,7 +27,10 @@ export class HomePage {
 
     const ws = new WebsocketService();
     ws.createObservableSocket(url, blah).subscribe(
-      (message) => this.globalMessages.push(message));
+      (message) => {
+        this.globalMessages.pop();
+        this.globalMessages.push(message);
+      });
 
     // Personal Stuff
     TimerObservable.create(0, 5000)
