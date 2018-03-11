@@ -119,7 +119,7 @@ var HomePage = (function () {
                                 _this.riddleProvider.answerRiddle(_this.easterEggTags).subscribe(function (res) {
                                     var correctAnswer = !!res;
                                     if (correctAnswer) {
-                                        _this.easterEggResults = "Yeah, you got it right!";
+                                        _this.easterEggResults = "Yeah, you got it right! Glasses!";
                                         _this.easterEggWon = true;
                                     }
                                     else {
