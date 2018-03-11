@@ -19,6 +19,7 @@ export class HomePage {
   status = '';
   easterEgg = false;
   easterEggRiddle = '';
+  easterEggTags = [];
 
   constructor(
     public navCtrl: NavController,
@@ -63,7 +64,7 @@ export class HomePage {
                 if (hasRiddle) {
                   this.objectProvider.getObjectIds()
                     .subscribe((objectIds) => {
-                      this.easterEggRiddle = objectIds["description"]["tags"]
+                      this.easterEggTags = objectIds["description"]["tags"];
                       this.easterEgg = true;
 
                       this.pause = true;

@@ -10,6 +10,9 @@
       <ion-row>
           <h2>{{ easterEggRiddle }}</h2>
       </ion-row>
+      <ul>
+          <li *ngFor="easterEggTag in easterEggTags">{{ easterEggTag }}</li>
+      </ul>
   </ion-grid>
   
   <ion-grid col-sm-8 *ngIf="!easterEgg">
