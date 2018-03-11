@@ -2,5 +2,7 @@
   "name": "message-display",
   "app_id": "da0cb2fd",
   "type": "ionic-angular",
-  "integrations": {}
+  "integrations": {
+    "cordova": {}
+  }
 }
