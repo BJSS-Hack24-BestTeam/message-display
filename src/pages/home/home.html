@@ -10,9 +10,12 @@
       <ion-row>
           <h2>{{ easterEggRiddle }}</h2>
       </ion-row>
-      <ul>
-          <li *ngFor="let easterEggTag of easterEggTags">{{ easterEggTag }}</li>
-      </ul>
+      <ion-row *ngIf="easterEggWon">
+        <img src="assets/imgs/mhr.png">
+      </ion-row>
+      <ion-row>
+          <h3>{{ easterEggResults }}</h3>
+      </ion-row>
   </ion-grid>
   
   <ion-grid col-sm-8 *ngIf="!easterEgg">

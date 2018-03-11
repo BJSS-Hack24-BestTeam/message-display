@@ -19,7 +19,9 @@ export class HomePage {
   status = '';
   easterEgg = false;
   easterEggRiddle = '';
+  easterEggResults = '';
   easterEggTags = [];
+  easterEggWon = false;
 
   constructor(
     public navCtrl: NavController,
@@ -59,21 +61,37 @@ export class HomePage {
             const isEasterEggPlayer = !!message["isEasterEggPlayer"]
 
             if (isEasterEggPlayer) {
+              this.easterEggResults = '';
+              this.easterEggWon = false;
+
               this.riddleProvider.hasRiddle(personId).subscribe((hasRiddle) => {
 
                 if (hasRiddle) {
-                  this.objectProvider.getObjectIds()
+                  this.objectProvider.getObjects()
                     .subscribe((objectIds) => {
                       this.easterEggTags = objectIds["description"]["tags"];
                       this.easterEgg = true;
 
-                      this.pause = true;
+                      this.riddleProvider.answerRiddle(this.easterEggTags).subscribe((res) => {
+                        
+                        if (!!res) {
+                          this.easterEggResults = "Yeah, you got it right!";
+                          this.easterEggWon = true;
+                        }
+                        else {
+                          this.easterEggResults = "Sorry, it is not the right answer.";
+                        }
+                        this.pause = true;
 
-                      const pauseObs = TimerObservable.create(20000).subscribe(() => {
-                        this.pause = false;
-                        this.easterEgg = false;
-                        pauseObs.unsubscribe();
+                        const pauseObs = TimerObservable.create(20000).subscribe(() => {
+                          this.pause = false;
+                          this.easterEgg = false;
+                          pauseObs.unsubscribe();
+                        });
+
                       });
+
+                      
                     });
                 }
                 else {

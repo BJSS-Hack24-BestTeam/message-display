@@ -16,7 +16,7 @@ export class ObjectProvider {
     
   }
   
-  getObjectIds() {
+  getObjects() {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     headers.append('Access-Control-Allow-Origin' , '*');
     headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
