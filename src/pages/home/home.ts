@@ -58,7 +58,7 @@ export class HomePage {
             const isEasterEggPlayer = !!message["isEasterEggPlayer"]
 
             if (isEasterEggPlayer) {
-              const hasRiddle = this.riddleProvider.hasRiddle(personId);
+              this.riddleProvider.hasRiddle(personId).subscribe((hasRiddle) => {
 
               if (hasRiddle) {
                 this.objectProvider.getObjectIds()
@@ -92,6 +92,7 @@ export class HomePage {
 
                   });
                 }
+              });
             }
             else {
               this.personalMessageProvider.getPersonalMessages(personId)
