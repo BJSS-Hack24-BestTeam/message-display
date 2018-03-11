@@ -13,6 +13,7 @@ export class HomePage {
 
   globalMessages: string[] = [];
   personalMessages: string[] = [];
+  pause = false;
 
   constructor(
     public navCtrl: NavController, 
@@ -29,8 +30,12 @@ export class HomePage {
       (message) => this.globalMessages.push(message));
 
     // Personal Stuff
-    TimerObservable.create(0, 2000)
+    TimerObservable.create(0, 5000)
       .subscribe(() => {
+        if (this.pause) {
+          return;
+        }
+
         this.personalMessageProvider.getPersonIds()
           .subscribe((message) => {
 
@@ -41,6 +46,13 @@ export class HomePage {
               .subscribe((messages: any[]) => {
                 for(const msg of messages) {
                   this.personalMessages.push(msg["theMessage"]);
+
+                  this.pause = true;
+
+                  const pauseObs = TimerObservable.create(0, 15000).subscribe(() => {
+                    this.pause = false;
+                    pauseObs.unsubscribe();
+                  });
                 }
               });
           },
