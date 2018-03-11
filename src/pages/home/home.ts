@@ -14,6 +14,7 @@ export class HomePage {
   globalMessages: string[] = [];
   personalMessages: string[] = [];
   pause = false;
+  status = '';
 
   constructor(
     public navCtrl: NavController, 
@@ -49,6 +50,7 @@ export class HomePage {
             this.personalMessages = [];
             const personId = message["personId"];
             const isEasterEggPlayer = !!message["isEasterEggPlayer"]
+            this.status = "Is EasterEgg " + isEasterEggPlayer;
 
             if (isEasterEggPlayer === true) {
               this.playEasterEggGame();
@@ -78,6 +80,7 @@ export class HomePage {
   }
 
   playEasterEggGame(): any {
+    
     this.globalMessages.push("Looks like you are playing the Easter Egg game!!");
     this.globalMessages.pop();
 
