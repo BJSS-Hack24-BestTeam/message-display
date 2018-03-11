@@ -64,7 +64,9 @@ export class HomePage {
               this.easterEggResults = '';
               this.easterEggWon = false;
 
-              this.riddleProvider.hasRiddle(personId).subscribe((hasRiddle) => {
+              this.riddleProvider.hasRiddle(personId).subscribe((res) => {
+
+                const hasRiddle = !!res;
 
                 if (hasRiddle) {
                   this.objectProvider.getObjects()
@@ -99,6 +101,7 @@ export class HomePage {
                     .subscribe((messages: any[]) => {
 
                       this.easterEggRiddle = messages["riddle"];
+                      this.easterEggResults = '';
                       this.easterEgg = true;
 
                       this.pause = true;

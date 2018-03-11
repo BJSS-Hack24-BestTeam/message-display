@@ -109,7 +109,8 @@ var HomePage = (function () {
                 if (isEasterEggPlayer) {
                     _this.easterEggResults = '';
                     _this.easterEggWon = false;
-                    _this.riddleProvider.hasRiddle(personId).subscribe(function (hasRiddle) {
+                    _this.riddleProvider.hasRiddle(personId).subscribe(function (res) {
+                        var hasRiddle = !!res;
                         if (hasRiddle) {
                             _this.objectProvider.getObjects()
                                 .subscribe(function (objectIds) {
@@ -136,6 +137,7 @@ var HomePage = (function () {
                             _this.riddleProvider.getRiddle(personId)
                                 .subscribe(function (messages) {
                                 _this.easterEggRiddle = messages["riddle"];
+                                _this.easterEggResults = '';
                                 _this.easterEgg = true;
                                 _this.pause = true;
                                 var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
