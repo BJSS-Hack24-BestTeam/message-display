@@ -76,7 +76,10 @@ var HomePage = (function () {
         var url = "ws://51.143.186.87:8889/ws";
         var blah = new __WEBPACK_IMPORTED_MODULE_3_rxjs__["Subscriber"]();
         var ws = new __WEBPACK_IMPORTED_MODULE_2__services_websocket__["a" /* WebsocketService */]();
-        ws.createObservableSocket(url, blah).subscribe(function (message) { return _this.globalMessages.push(message); });
+        ws.createObservableSocket(url, blah).subscribe(function (message) {
+            _this.globalMessages.pop();
+            _this.globalMessages.push(message);
+        });
         // Personal Stuff
         __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 5000)
             .subscribe(function () {
