@@ -64,6 +64,15 @@ export class HomePage {
                 this.objectProvider.getObjectIds()
                   .subscribe((objectIds) => {
                     this.easterEggRiddle = <any>objectIds;
+                    this.easterEgg = true;
+
+                    this.pause = true;
+                    
+                    const pauseObs = TimerObservable.create(20000).subscribe(() => {
+                      this.pause = false;
+                      this.easterEgg = false;
+                      pauseObs.unsubscribe();
+                    });
                   });
               }
               else {

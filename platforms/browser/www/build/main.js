@@ -109,6 +109,13 @@ var HomePage = (function () {
                         _this.objectProvider.getObjectIds()
                             .subscribe(function (objectIds) {
                             _this.easterEggRiddle = objectIds;
+                            _this.easterEgg = true;
+                            _this.pause = true;
+                            var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
+                                _this.pause = false;
+                                _this.easterEgg = false;
+                                pauseObs.unsubscribe();
+                            });
                         });
                     }
                     else {
