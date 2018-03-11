@@ -103,7 +103,7 @@ var HomePage = (function () {
                 if (isEasterEggPlayer) {
                     _this.riddleProvider.getRiddle(personId)
                         .subscribe(function (messages) {
-                        _this.easterEggRiddle = messages["riddleText"];
+                        _this.easterEggRiddle = messages["riddle"];
                         _this.easterEgg = true;
                         _this.pause = true;
                         var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {

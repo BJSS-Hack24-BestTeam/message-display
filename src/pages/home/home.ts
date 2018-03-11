@@ -59,7 +59,7 @@ export class HomePage {
               this.riddleProvider.getRiddle(personId)
                 .subscribe((messages: any[]) => {
 
-                  this.easterEggRiddle = messages["riddleText"];
+                  this.easterEggRiddle = messages["riddle"];
                   this.easterEgg = true;
 
                   this.pause = true;
