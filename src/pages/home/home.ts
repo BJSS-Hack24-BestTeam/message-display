@@ -58,7 +58,7 @@ export class HomePage {
 
                 this.pause = true;
                 
-                const pauseObs = TimerObservable.create(0, 20000).subscribe(() => {
+                const pauseObs = TimerObservable.create(20000).subscribe(() => {
                   this.pause = false;
                   pauseObs.unsubscribe();
                 });
