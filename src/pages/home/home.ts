@@ -63,7 +63,7 @@ export class HomePage {
                 if (hasRiddle) {
                   this.objectProvider.getObjectIds()
                     .subscribe((objectIds) => {
-                      this.easterEggRiddle = objectIds["tags"];
+                      this.easterEggRiddle = objectIds["description"]["tags"]
                       this.easterEgg = true;
 
                       this.pause = true;
