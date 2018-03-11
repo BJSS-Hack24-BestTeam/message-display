@@ -11,7 +11,7 @@
           <h2>{{ easterEggRiddle }}</h2>
       </ion-row>
       <ul>
-          <li *ngFor="easterEggTag in easterEggTags">{{ easterEggTag }}</li>
+          <li *ngFor="let easterEggTag of easterEggTags">{{ easterEggTag }}</li>
       </ul>
   </ion-grid>
   
