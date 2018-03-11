@@ -76,7 +76,7 @@ var HomePage = (function () {
         this.personalMessages = [];
         this.pause = false;
         this.status = '';
-        this.easterEgg = false;
+        this.showEasterEgg = false;
         this.easterEggRiddle = '';
         this.easterEggResults = '';
         this.easterEggTags = [];
@@ -110,14 +110,15 @@ var HomePage = (function () {
                     _this.easterEggResults = '';
                     _this.easterEggWon = false;
                     _this.riddleProvider.hasRiddle(personId).subscribe(function (res) {
-                        var hasRiddle = !!res;
+                        var hasRiddle = (res == 'true');
                         if (hasRiddle) {
                             _this.objectProvider.getObjects()
                                 .subscribe(function (objectIds) {
                                 _this.easterEggTags = objectIds["description"]["tags"];
-                                _this.easterEgg = true;
+                                _this.showEasterEgg = true;
                                 _this.riddleProvider.answerRiddle(_this.easterEggTags).subscribe(function (res) {
-                                    if (!!res) {
+                                    var correctAnswer = (res == 'true');
+                                    if (correctAnswer) {
                                         _this.easterEggResults = "Yeah, you got it right!";
                                         _this.easterEggWon = true;
                                     }
@@ -127,7 +128,7 @@ var HomePage = (function () {
                                     _this.pause = true;
                                     var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
                                         _this.pause = false;
-                                        _this.easterEgg = false;
+                                        _this.showEasterEgg = false;
                                         pauseObs.unsubscribe();
                                     });
                                 });
@@ -138,11 +139,11 @@ var HomePage = (function () {
                                 .subscribe(function (messages) {
                                 _this.easterEggRiddle = messages["riddle"];
                                 _this.easterEggResults = '';
-                                _this.easterEgg = true;
+                                _this.showEasterEgg = true;
                                 _this.pause = true;
                                 var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
                                     _this.pause = false;
-                                    _this.easterEgg = false;
+                                    _this.showEasterEgg = false;
                                     pauseObs.unsubscribe();
                                 });
                             });
@@ -171,7 +172,7 @@ var HomePage = (function () {
     };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
-            selector: 'page-home',template:/*ion-inline-start:"/Users/daniel.childs/Documents/dev/hack24/message-display/src/pages/home/home.html"*/'<ion-header>\n  <app-header></app-header>\n</ion-header>\n\n<ion-content>\n  <ion-grid col-sm-8 *ngIf="easterEgg">\n      <ion-row>\n        <h1>RIDDLE ME THIS</h1>\n      </ion-row>\n      <ion-row>\n          <h2>{{ easterEggRiddle }}</h2>\n      </ion-row>\n      <ion-row *ngIf="easterEggWon">\n        <img src="assets/imgs/mhr.png">\n      </ion-row>\n      <ion-row>\n          <h3>{{ easterEggResults }}</h3>\n      </ion-row>\n  </ion-grid>\n  \n  <ion-grid col-sm-8 *ngIf="!easterEgg">\n    <ion-card class="global-card">\n      <ion-row>\n        {{ status }}\n      </ion-row>\n      <ion-row>\n        <div>\n          <h1>Today\'s Messages:</h1>\n        </div>\n      </ion-row>\n      <ion-row>\n        <ion-card class="message" *ngFor="let message of globalMessages">{{ message }}</ion-card>\n      </ion-row>\n    </ion-card>\n    <ion-row>\n\n    <ion-card class="global-card">\n        <div *ngIf="personalMessages.length == 0" class="waiting-msg">Please step closer to the device</div>\n        <ion-card class="message" *ngFor="let message of personalMessages">{{ message }}</ion-card>\n    </ion-card>\n      \n    </ion-row>\n    \n  </ion-grid>\n</ion-content>'/*ion-inline-end:"/Users/daniel.childs/Documents/dev/hack24/message-display/src/pages/home/home.html"*/
+            selector: 'page-home',template:/*ion-inline-start:"/Users/daniel.childs/Documents/dev/hack24/message-display/src/pages/home/home.html"*/'<ion-header>\n  <app-header></app-header>\n</ion-header>\n\n<ion-content>\n  <ion-grid col-sm-8 *ngIf="showEasterEgg">\n      <ion-row>\n        <h1>RIDDLE ME THIS</h1>\n      </ion-row>\n      <ion-row>\n          <h2>{{ easterEggRiddle }}</h2>\n      </ion-row>\n      <ion-row *ngIf="easterEggWon">\n        <img src="assets/imgs/mhr.png">\n      </ion-row>\n      <ion-row>\n          <h3>{{ easterEggResults }}</h3>\n      </ion-row>\n  </ion-grid>\n  \n  <ion-grid col-sm-8 *ngIf="!easterEgg">\n    <ion-card class="global-card">\n      <ion-row>\n        {{ status }}\n      </ion-row>\n      <ion-row>\n        <div>\n          <h1>Today\'s Messages:</h1>\n        </div>\n      </ion-row>\n      <ion-row>\n        <ion-card class="message" *ngFor="let message of globalMessages">{{ message }}</ion-card>\n      </ion-row>\n    </ion-card>\n    <ion-row>\n\n    <ion-card class="global-card">\n        <div *ngIf="personalMessages.length == 0" class="waiting-msg">Please step closer to the device</div>\n        <ion-card class="message" *ngFor="let message of personalMessages">{{ message }}</ion-card>\n    </ion-card>\n      \n    </ion-row>\n    \n  </ion-grid>\n</ion-content>'/*ion-inline-end:"/Users/daniel.childs/Documents/dev/hack24/message-display/src/pages/home/home.html"*/
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_4__providers_personal_message_personal_message__["a" /* PersonalMessageProvider */],

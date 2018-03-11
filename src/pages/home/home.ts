@@ -17,7 +17,7 @@ export class HomePage {
   personalMessages: string[] = [];
   pause = false;
   status = '';
-  easterEgg = false;
+  showEasterEgg = false;
   easterEggRiddle = '';
   easterEggResults = '';
   easterEggTags = [];
@@ -66,17 +66,19 @@ export class HomePage {
 
               this.riddleProvider.hasRiddle(personId).subscribe((res) => {
 
-                const hasRiddle = !!res;
+                const hasRiddle = (res == 'true');
 
                 if (hasRiddle) {
                   this.objectProvider.getObjects()
                     .subscribe((objectIds) => {
                       this.easterEggTags = objectIds["description"]["tags"];
-                      this.easterEgg = true;
+                      this.showEasterEgg = true;
 
                       this.riddleProvider.answerRiddle(this.easterEggTags).subscribe((res) => {
                         
-                        if (!!res) {
+                        const correctAnswer = (res == 'true'); 
+
+                        if (correctAnswer) {
                           this.easterEggResults = "Yeah, you got it right!";
                           this.easterEggWon = true;
                         }
@@ -87,7 +89,7 @@ export class HomePage {
 
                         const pauseObs = TimerObservable.create(20000).subscribe(() => {
                           this.pause = false;
-                          this.easterEgg = false;
+                          this.showEasterEgg = false;
                           pauseObs.unsubscribe();
                         });
 
@@ -102,13 +104,13 @@ export class HomePage {
 
                       this.easterEggRiddle = messages["riddle"];
                       this.easterEggResults = '';
-                      this.easterEgg = true;
+                      this.showEasterEgg = true;
 
                       this.pause = true;
 
                       const pauseObs = TimerObservable.create(20000).subscribe(() => {
                         this.pause = false;
-                        this.easterEgg = false;
+                        this.showEasterEgg = false;
                         pauseObs.unsubscribe();
                       });
 
