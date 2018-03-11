@@ -81,7 +81,7 @@ export class HomePage {
                         const correctAnswer = !!res;
 
                         if (correctAnswer) {
-                          this.easterEggResults = "Yeah, you got it right!";
+                          this.easterEggResults = "Yeah, you got it right! Glasses!";
                           this.easterEggWon = true;
                         }
                         else {
