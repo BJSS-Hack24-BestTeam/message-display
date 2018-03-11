@@ -68,6 +68,7 @@ var HomePage = (function () {
         this.personalMessageProvider = personalMessageProvider;
         this.globalMessages = [];
         this.personalMessages = [];
+        this.pause = false;
     }
     HomePage.prototype.ionViewDidLoad = function () {
         var _this = this;
@@ -77,17 +78,28 @@ var HomePage = (function () {
         var ws = new __WEBPACK_IMPORTED_MODULE_2__services_websocket__["a" /* WebsocketService */]();
         ws.createObservableSocket(url, blah).subscribe(function (message) { return _this.globalMessages.push(message); });
         // Personal Stuff
-        __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 2000)
+        __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 5000)
             .subscribe(function () {
+            if (_this.pause) {
+                return;
+            }
             _this.personalMessageProvider.getPersonIds()
                 .subscribe(function (message) {
                 _this.personalMessages = [];
                 var personId = message["personId"];
                 _this.personalMessageProvider.getPersonalMessages(personId)
                     .subscribe(function (messages) {
+                    var _loop_1 = function (msg) {
+                        _this.personalMessages.push(msg["theMessage"]);
+                        _this.pause = true;
+                        var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 15000).subscribe(function () {
+                            _this.pause = false;
+                            pauseObs.unsubscribe();
+                        });
+                    };
                     for (var _i = 0, messages_1 = messages; _i < messages_1.length; _i++) {
                         var msg = messages_1[_i];
-                        _this.personalMessages.push(msg["theMessage"]);
+                        _loop_1(msg);
                     }
                 });
             }, function (err) {
