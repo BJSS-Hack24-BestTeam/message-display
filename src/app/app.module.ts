@@ -9,6 +9,7 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { PersonalMessageProvider } from '../providers/personal-message/personal-message';
 import { HttpClientModule } from '@angular/common/http';
+import { RiddleProvider } from '../providers/riddle/riddle';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { HttpClientModule } from '@angular/common/http';
     StatusBar,
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
-    PersonalMessageProvider
+    PersonalMessageProvider,
+    RiddleProvider
   ]
 })
 export class AppModule {}

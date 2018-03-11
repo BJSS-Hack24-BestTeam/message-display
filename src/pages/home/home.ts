@@ -4,6 +4,7 @@ import { WebsocketService } from '../../services/websocket';
 import { Subscriber } from 'rxjs';
 import { PersonalMessageProvider } from '../../providers/personal-message/personal-message';
 import { TimerObservable } from "rxjs/observable/TimerObservable";
+import { RiddleProvider } from '../../providers/riddle/riddle';
 
 @Component({
   selector: 'page-home',
@@ -15,10 +16,13 @@ export class HomePage {
   personalMessages: string[] = [];
   pause = false;
   status = '';
+  easterEgg = false;
+  easterEggRiddle = '';
 
   constructor(
     public navCtrl: NavController, 
-    private personalMessageProvider: PersonalMessageProvider) {
+    private personalMessageProvider: PersonalMessageProvider,
+    private riddleProvider: RiddleProvider) {
   }
 
   ionViewDidLoad() {
@@ -50,10 +54,23 @@ export class HomePage {
             this.personalMessages = [];
             const personId = message["personId"];
             const isEasterEggPlayer = !!message["isEasterEggPlayer"]
-            this.status = "Is EasterEgg " + isEasterEggPlayer;
 
-            if (isEasterEggPlayer === true) {
-              this.playEasterEggGame();
+            if (isEasterEggPlayer) {
+              this.riddleProvider.getRiddle(personId)
+                .subscribe((messages: any[]) => {
+
+                  this.easterEggRiddle = messages["riddleText"];
+                  this.easterEgg = true;
+
+                  this.pause = true;
+                  
+                  const pauseObs = TimerObservable.create(20000).subscribe(() => {
+                    this.pause = false;
+                    this.easterEgg = false;
+                    pauseObs.unsubscribe();
+                  });
+
+                });
             }
             else {
               this.personalMessageProvider.getPersonalMessages(personId)
@@ -77,18 +94,5 @@ export class HomePage {
            this.personalMessages = [];
          } );
       });
-  }
-
-  playEasterEggGame(): any {
-    
-    this.globalMessages.push("Looks like you are playing the Easter Egg game!!");
-    this.globalMessages.pop();
-
-    this.pause = true;
-                  
-    const pauseObs = TimerObservable.create(20000).subscribe(() => {
-      this.pause = false;
-      pauseObs.unsubscribe();
-    });
   }
 }
