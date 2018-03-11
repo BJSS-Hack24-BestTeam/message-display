@@ -17,13 +17,9 @@
     <ion-row>
 
     <ion-card class="global-card">
-        <div class="waiting-msg">Please step closer to the device</div>
+        <div *ngIf="personalMessages.length == 0" class="waiting-msg">Please step closer to the device</div>
+        <ion-card class="message" *ngFor="let message of personalMessages">{{ message }}</ion-card>
     </ion-card>
-
-    <!-- <ion-card class="global-card">
-        <ion-card class="message">Hello, Bob</ion-card>
-        <ion-card class="message">Do this thing</ion-card>
-    </ion-card> -->
       
     </ion-row>
     
