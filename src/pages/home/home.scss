@@ -2,5 +2,19 @@ page-home {
     .message {
         font-family: "Source_Sans_Pro/SourceSansPro-Regular";
         font-size: 30px;
+        padding: 10px;
+    }
+    h1 {
+        margin: 0 auto;
+    }
+    ion-card {
+        padding: 10px;
+    }
+
+    .waiting-msg {
+        font-family: "Roboto/Roboto-Regular";
+        font-size: 30px;
+        padding: 10px;
+        text-align: center;
     }
 }

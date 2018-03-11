@@ -1,3 +1,31 @@
+<ion-header>
+  <app-header></app-header>
+</ion-header>
+
 <ion-content>
-  <ion-card class="message" *ngFor="let message of globalMessages">{{ message }}</ion-card>
+  <ion-grid col-sm-8>
+    <ion-card class="global-card">
+      <ion-row>
+        <div>
+          <h1>Today's Messages:</h1>
+        </div>
+      </ion-row>
+      <ion-row>
+        <ion-card class="message" *ngFor="let message of globalMessages">{{ message }}</ion-card>
+      </ion-row>
+    </ion-card>
+    <ion-row>
+
+    <ion-card class="global-card">
+        <div class="waiting-msg">Please step closer to the device</div>
+    </ion-card>
+
+    <!-- <ion-card class="global-card">
+        <ion-card class="message">Hello, Bob</ion-card>
+        <ion-card class="message">Do this thing</ion-card>
+    </ion-card> -->
+      
+    </ion-row>
+    
+  </ion-grid>
 </ion-content>
