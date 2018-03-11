@@ -40,14 +40,15 @@ webpackEmptyAsyncContext.id = 206;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return HomePage; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(87);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_websocket__ = __webpack_require__(398);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__services_websocket__ = __webpack_require__(399);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs__ = __webpack_require__(253);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_rxjs___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_rxjs__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__providers_personal_message_personal_message__ = __webpack_require__(346);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__ = __webpack_require__(257);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__providers_riddle_riddle__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__providers_object_object__ = __webpack_require__(348);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -64,11 +65,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 
 
+
 var HomePage = (function () {
-    function HomePage(navCtrl, personalMessageProvider, riddleProvider) {
+    function HomePage(navCtrl, personalMessageProvider, riddleProvider, objectProvider) {
         this.navCtrl = navCtrl;
         this.personalMessageProvider = personalMessageProvider;
         this.riddleProvider = riddleProvider;
+        this.objectProvider = objectProvider;
         this.globalMessages = [];
         this.personalMessages = [];
         this.pause = false;
@@ -101,17 +104,26 @@ var HomePage = (function () {
                 var personId = message["personId"];
                 var isEasterEggPlayer = !!message["isEasterEggPlayer"];
                 if (isEasterEggPlayer) {
-                    _this.riddleProvider.getRiddle(personId)
-                        .subscribe(function (messages) {
-                        _this.easterEggRiddle = messages["riddle"];
-                        _this.easterEgg = true;
-                        _this.pause = true;
-                        var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
-                            _this.pause = false;
-                            _this.easterEgg = false;
-                            pauseObs.unsubscribe();
+                    var hasRiddle = _this.riddleProvider.hasRiddle(personId);
+                    if (hasRiddle) {
+                        _this.objectProvider.getObjectIds()
+                            .subscribe(function (objectIds) {
+                            _this.easterEggRiddle = objectIds;
                         });
-                    });
+                    }
+                    else {
+                        _this.riddleProvider.getRiddle(personId)
+                            .subscribe(function (messages) {
+                            _this.easterEggRiddle = messages["riddle"];
+                            _this.easterEgg = true;
+                            _this.pause = true;
+                            var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(20000).subscribe(function () {
+                                _this.pause = false;
+                                _this.easterEgg = false;
+                                pauseObs.unsubscribe();
+                            });
+                        });
+                    }
                 }
                 else {
                     _this.personalMessageProvider.getPersonalMessages(personId)
@@ -139,7 +151,8 @@ var HomePage = (function () {
         }),
         __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_1_ionic_angular__["d" /* NavController */],
             __WEBPACK_IMPORTED_MODULE_4__providers_personal_message_personal_message__["a" /* PersonalMessageProvider */],
-            __WEBPACK_IMPORTED_MODULE_6__providers_riddle_riddle__["a" /* RiddleProvider */]])
+            __WEBPACK_IMPORTED_MODULE_6__providers_riddle_riddle__["a" /* RiddleProvider */],
+            __WEBPACK_IMPORTED_MODULE_7__providers_object_object__["a" /* ObjectProvider */]])
     ], HomePage);
     return HomePage;
 }());
@@ -153,7 +166,7 @@ var HomePage = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return PersonalMessageProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -202,7 +215,7 @@ var PersonalMessageProvider = (function () {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RiddleProvider; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -219,8 +232,16 @@ var RiddleProvider = (function () {
     function RiddleProvider(http) {
         this.http = http;
         this.riddleApi = 'http://51.143.186.87:8080/riddle/';
+        this.hasRiddleApi = 'http://51.143.186.87:8080/hasriddle/';
     }
     RiddleProvider.prototype.getRiddle = function (personId) {
+        var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' });
+        headers.append('Access-Control-Allow-Origin', '*');
+        headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+        headers.append('Accept', 'application/json');
+        return this.http.get(this.riddleApi + personId, { headers: headers });
+    };
+    RiddleProvider.prototype.hasRiddle = function (personId) {
         var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' });
         headers.append('Access-Control-Allow-Origin', '*');
         headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
@@ -242,9 +263,56 @@ var RiddleProvider = (function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return ObjectProvider; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_common_http__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+
+/*
+  Generated class for the ObjectProvider provider.
+
+  See https://angular.io/guide/dependency-injection for more info on providers
+  and Angular DI.
+*/
+var ObjectProvider = (function () {
+    function ObjectProvider(http) {
+        this.http = http;
+        this.objectsCheckUrl = "http://127.0.0.1:5000/display/objects";
+    }
+    ObjectProvider.prototype.getObjectIds = function () {
+        var headers = new __WEBPACK_IMPORTED_MODULE_0__angular_common_http__["c" /* HttpHeaders */]({ 'Content-Type': 'application/json' });
+        headers.append('Access-Control-Allow-Origin', '*');
+        headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
+        headers.append('Accept', 'application/json');
+        return this.http.get(this.objectsCheckUrl, { headers: headers });
+    };
+    ObjectProvider = __decorate([
+        Object(__WEBPACK_IMPORTED_MODULE_1__angular_core__["A" /* Injectable */])(),
+        __metadata("design:paramtypes", [__WEBPACK_IMPORTED_MODULE_0__angular_common_http__["a" /* HttpClient */]])
+    ], ObjectProvider);
+    return ObjectProvider;
+}());
+
+//# sourceMappingURL=object.js.map
+
+/***/ }),
+
+/***/ 349:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(349);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(353);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__ = __webpack_require__(350);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__app_module__ = __webpack_require__(354);
 
 
 Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* platformBrowserDynamic */])().bootstrapModule(__WEBPACK_IMPORTED_MODULE_1__app_module__["a" /* AppModule */]);
@@ -252,28 +320,30 @@ Object(__WEBPACK_IMPORTED_MODULE_0__angular_platform_browser_dynamic__["a" /* pl
 
 /***/ }),
 
-/***/ 353:
+/***/ 354:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return AppModule; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_platform_browser__ = __webpack_require__(41);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_ionic_angular__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(246);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__ionic_native_status_bar__ = __webpack_require__(251);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_header_header__ = __webpack_require__(396);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_header_header__ = __webpack_require__(397);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__app_component__ = __webpack_require__(398);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__pages_home_home__ = __webpack_require__(252);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__providers_personal_message_personal_message__ = __webpack_require__(346);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_common_http__ = __webpack_require__(149);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__angular_common_http__ = __webpack_require__(82);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__providers_riddle_riddle__ = __webpack_require__(347);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__providers_object_object__ = __webpack_require__(348);
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
 
 
 
@@ -312,7 +382,8 @@ var AppModule = (function () {
                 __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__["a" /* SplashScreen */],
                 { provide: __WEBPACK_IMPORTED_MODULE_1__angular_core__["u" /* ErrorHandler */], useClass: __WEBPACK_IMPORTED_MODULE_2_ionic_angular__["b" /* IonicErrorHandler */] },
                 __WEBPACK_IMPORTED_MODULE_8__providers_personal_message_personal_message__["a" /* PersonalMessageProvider */],
-                __WEBPACK_IMPORTED_MODULE_10__providers_riddle_riddle__["a" /* RiddleProvider */]
+                __WEBPACK_IMPORTED_MODULE_10__providers_riddle_riddle__["a" /* RiddleProvider */],
+                __WEBPACK_IMPORTED_MODULE_11__providers_object_object__["a" /* ObjectProvider */]
             ]
         })
     ], AppModule);
@@ -323,7 +394,7 @@ var AppModule = (function () {
 
 /***/ }),
 
-/***/ 396:
+/***/ 397:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -355,13 +426,13 @@ var HeaderComponent = (function () {
 
 /***/ }),
 
-/***/ 397:
+/***/ 398:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MyApp; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__angular_core__ = __webpack_require__(1);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_ionic_angular__ = __webpack_require__(88);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__ionic_native_status_bar__ = __webpack_require__(251);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__ionic_native_splash_screen__ = __webpack_require__(246);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__pages_home_home__ = __webpack_require__(252);
@@ -401,7 +472,7 @@ var MyApp = (function () {
 
 /***/ }),
 
-/***/ 398:
+/***/ 399:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -447,5 +518,5 @@ var WebsocketService = (function () {
 
 /***/ })
 
-},[348]);
+},[349]);
 //# sourceMappingURL=main.js.map

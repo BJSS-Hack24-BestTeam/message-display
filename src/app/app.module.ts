@@ -10,6 +10,7 @@ import { HomePage } from '../pages/home/home';
 import { PersonalMessageProvider } from '../providers/personal-message/personal-message';
 import { HttpClientModule } from '@angular/common/http';
 import { RiddleProvider } from '../providers/riddle/riddle';
+import { ObjectProvider } from '../providers/object/object';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import { RiddleProvider } from '../providers/riddle/riddle';
     SplashScreen,
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     PersonalMessageProvider,
-    RiddleProvider
+    RiddleProvider,
+    ObjectProvider
   ]
 })
 export class AppModule {}

@@ -5,6 +5,7 @@ import { Subscriber } from 'rxjs';
 import { PersonalMessageProvider } from '../../providers/personal-message/personal-message';
 import { TimerObservable } from "rxjs/observable/TimerObservable";
 import { RiddleProvider } from '../../providers/riddle/riddle';
+import { ObjectProvider } from '../../providers/object/object';
 
 @Component({
   selector: 'page-home',
@@ -22,7 +23,8 @@ export class HomePage {
   constructor(
     public navCtrl: NavController, 
     private personalMessageProvider: PersonalMessageProvider,
-    private riddleProvider: RiddleProvider) {
+    private riddleProvider: RiddleProvider,
+    private objectProvider: ObjectProvider) {
   }
 
   ionViewDidLoad() {
@@ -56,21 +58,31 @@ export class HomePage {
             const isEasterEggPlayer = !!message["isEasterEggPlayer"]
 
             if (isEasterEggPlayer) {
-              this.riddleProvider.getRiddle(personId)
-                .subscribe((messages: any[]) => {
+              const hasRiddle = this.riddleProvider.hasRiddle(personId);
 
-                  this.easterEggRiddle = messages["riddle"];
-                  this.easterEgg = true;
-
-                  this.pause = true;
-                  
-                  const pauseObs = TimerObservable.create(20000).subscribe(() => {
-                    this.pause = false;
-                    this.easterEgg = false;
-                    pauseObs.unsubscribe();
+              if (hasRiddle) {
+                this.objectProvider.getObjectIds()
+                  .subscribe((objectIds) => {
+                    this.easterEggRiddle = <any>objectIds;
                   });
+              }
+              else {
+                this.riddleProvider.getRiddle(personId)
+                  .subscribe((messages: any[]) => {
 
-                });
+                    this.easterEggRiddle = messages["riddle"];
+                    this.easterEgg = true;
+
+                    this.pause = true;
+                    
+                    const pauseObs = TimerObservable.create(20000).subscribe(() => {
+                      this.pause = false;
+                      this.easterEgg = false;
+                      pauseObs.unsubscribe();
+                    });
+
+                  });
+                }
             }
             else {
               this.personalMessageProvider.getPersonalMessages(personId)
