@@ -80,7 +80,7 @@ var HomePage = (function () {
         // Personal Stuff
         __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 5000)
             .subscribe(function () {
-            if (_this.pause) {
+            if (_this.pause === true) {
                 return;
             }
             _this.personalMessageProvider.getPersonIds()
@@ -89,18 +89,15 @@ var HomePage = (function () {
                 var personId = message["personId"];
                 _this.personalMessageProvider.getPersonalMessages(personId)
                     .subscribe(function (messages) {
-                    var _loop_1 = function (msg) {
-                        _this.personalMessages.push(msg["theMessage"]);
-                        _this.pause = true;
-                        var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 15000).subscribe(function () {
-                            _this.pause = false;
-                            pauseObs.unsubscribe();
-                        });
-                    };
                     for (var _i = 0, messages_1 = messages; _i < messages_1.length; _i++) {
                         var msg = messages_1[_i];
-                        _loop_1(msg);
+                        _this.personalMessages.push(msg["theMessage"]);
                     }
+                    _this.pause = true;
+                    var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 15000).subscribe(function () {
+                        _this.pause = false;
+                        pauseObs.unsubscribe();
+                    });
                 });
             }, function (err) {
                 console.log(err);

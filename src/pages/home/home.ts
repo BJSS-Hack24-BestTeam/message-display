@@ -32,7 +32,7 @@ export class HomePage {
     // Personal Stuff
     TimerObservable.create(0, 5000)
       .subscribe(() => {
-        if (this.pause) {
+        if (this.pause === true) {
           return;
         }
 
@@ -44,16 +44,17 @@ export class HomePage {
 
             this.personalMessageProvider.getPersonalMessages(personId)
               .subscribe((messages: any[]) => {
+                
                 for(const msg of messages) {
                   this.personalMessages.push(msg["theMessage"]);
-
-                  this.pause = true;
-
-                  const pauseObs = TimerObservable.create(0, 15000).subscribe(() => {
-                    this.pause = false;
-                    pauseObs.unsubscribe();
-                  });
                 }
+
+                this.pause = true;
+                
+                const pauseObs = TimerObservable.create(0, 15000).subscribe(() => {
+                  this.pause = false;
+                  pauseObs.unsubscribe();
+                });
               });
           },
          (err) => {
