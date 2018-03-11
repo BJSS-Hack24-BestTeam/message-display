@@ -85,6 +85,9 @@ var HomePage = (function () {
             }
             _this.personalMessageProvider.getPersonIds()
                 .subscribe(function (message) {
+                if (_this.pause === true) {
+                    return;
+                }
                 _this.personalMessages = [];
                 var personId = message["personId"];
                 _this.personalMessageProvider.getPersonalMessages(personId)
@@ -94,7 +97,7 @@ var HomePage = (function () {
                         _this.personalMessages.push(msg["theMessage"]);
                     }
                     _this.pause = true;
-                    var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 15000).subscribe(function () {
+                    var pauseObs = __WEBPACK_IMPORTED_MODULE_5_rxjs_observable_TimerObservable__["TimerObservable"].create(0, 20000).subscribe(function () {
                         _this.pause = false;
                         pauseObs.unsubscribe();
                     });
