@@ -17,7 +17,9 @@ export class HomePage {
   constructor(
     public navCtrl: NavController, 
     private personalMessageProvider: PersonalMessageProvider) {
+  }
 
+  ionViewDidLoad() {
     // Global stuff
     const url = "ws://51.143.186.87:8889/ws";
     let blah: Subscriber<any> = new Subscriber();

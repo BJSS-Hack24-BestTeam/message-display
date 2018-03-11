@@ -64,11 +64,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 
 var HomePage = (function () {
     function HomePage(navCtrl, personalMessageProvider) {
-        var _this = this;
         this.navCtrl = navCtrl;
         this.personalMessageProvider = personalMessageProvider;
         this.globalMessages = [];
         this.personalMessages = [];
+    }
+    HomePage.prototype.ionViewDidLoad = function () {
+        var _this = this;
         // Global stuff
         var url = "ws://51.143.186.87:8889/ws";
         var blah = new __WEBPACK_IMPORTED_MODULE_3_rxjs__["Subscriber"]();
@@ -93,7 +95,7 @@ var HomePage = (function () {
                 _this.personalMessages = [];
             });
         });
-    }
+    };
     HomePage = __decorate([
         Object(__WEBPACK_IMPORTED_MODULE_0__angular_core__["m" /* Component */])({
             selector: 'page-home',template:/*ion-inline-start:"/Users/daniel.childs/Documents/dev/hack24/message-display/src/pages/home/home.html"*/'<ion-header>\n  <app-header></app-header>\n</ion-header>\n\n<ion-content>\n  <ion-grid col-sm-8>\n    <ion-card class="global-card">\n      <ion-row>\n        <div>\n          <h1>Today\'s Messages:</h1>\n        </div>\n      </ion-row>\n      <ion-row>\n        <ion-card class="message" *ngFor="let message of globalMessages">{{ message }}</ion-card>\n      </ion-row>\n    </ion-card>\n    <ion-row>\n\n    <ion-card class="global-card">\n        <div *ngIf="personalMessages.length == 0" class="waiting-msg">Please step closer to the device</div>\n        <ion-card class="message" *ngFor="let message of personalMessages">{{ message }}</ion-card>\n    </ion-card>\n      \n    </ion-row>\n    \n  </ion-grid>\n</ion-content>'/*ion-inline-end:"/Users/daniel.childs/Documents/dev/hack24/message-display/src/pages/home/home.html"*/
