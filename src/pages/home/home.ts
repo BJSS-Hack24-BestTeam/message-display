@@ -21,7 +21,7 @@ export class HomePage {
   easterEggRiddle = '';
 
   constructor(
-    public navCtrl: NavController, 
+    public navCtrl: NavController,
     private personalMessageProvider: PersonalMessageProvider,
     private riddleProvider: RiddleProvider,
     private objectProvider: ObjectProvider) {
@@ -60,50 +60,50 @@ export class HomePage {
             if (isEasterEggPlayer) {
               this.riddleProvider.hasRiddle(personId).subscribe((hasRiddle) => {
 
-              if (hasRiddle) {
-                this.objectProvider.getObjectIds()
-                  .subscribe((objectIds) => {
-                    this.easterEggRiddle = <any>objectIds;
-                    this.easterEgg = true;
+                if (hasRiddle) {
+                  this.objectProvider.getObjectIds()
+                    .subscribe((objectIds) => {
+                      this.easterEggRiddle = objectIds["tags"];
+                      this.easterEgg = true;
 
-                    this.pause = true;
-                    
-                    const pauseObs = TimerObservable.create(20000).subscribe(() => {
-                      this.pause = false;
-                      this.easterEgg = false;
-                      pauseObs.unsubscribe();
+                      this.pause = true;
+
+                      const pauseObs = TimerObservable.create(20000).subscribe(() => {
+                        this.pause = false;
+                        this.easterEgg = false;
+                        pauseObs.unsubscribe();
+                      });
                     });
-                  });
-              }
-              else {
-                this.riddleProvider.getRiddle(personId)
-                  .subscribe((messages: any[]) => {
+                }
+                else {
+                  this.riddleProvider.getRiddle(personId)
+                    .subscribe((messages: any[]) => {
 
-                    this.easterEggRiddle = messages["riddle"];
-                    this.easterEgg = true;
+                      this.easterEggRiddle = messages["riddle"];
+                      this.easterEgg = true;
 
-                    this.pause = true;
-                    
-                    const pauseObs = TimerObservable.create(20000).subscribe(() => {
-                      this.pause = false;
-                      this.easterEgg = false;
-                      pauseObs.unsubscribe();
+                      this.pause = true;
+
+                      const pauseObs = TimerObservable.create(20000).subscribe(() => {
+                        this.pause = false;
+                        this.easterEgg = false;
+                        pauseObs.unsubscribe();
+                      });
+
                     });
-
-                  });
                 }
               });
             }
             else {
               this.personalMessageProvider.getPersonalMessages(personId)
                 .subscribe((messages: any[]) => {
-                  
-                  for(const msg of messages) {
+
+                  for (const msg of messages) {
                     this.personalMessages.push(msg["theMessage"]);
                   }
 
                   this.pause = true;
-                  
+
                   const pauseObs = TimerObservable.create(20000).subscribe(() => {
                     this.pause = false;
                     pauseObs.unsubscribe();
@@ -111,10 +111,10 @@ export class HomePage {
                 });
             }
           },
-         (err) => {
-           console.log(err);
-           this.personalMessages = [];
-         } );
+            (err) => {
+              console.log(err);
+              this.personalMessages = [];
+            });
       });
   }
 }
