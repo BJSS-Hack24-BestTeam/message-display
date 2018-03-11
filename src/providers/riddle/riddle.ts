@@ -27,7 +27,7 @@ export class RiddleProvider {
     headers.append('Access-Control-Allow-Methods', 'POST, GET, OPTIONS, PUT');
     headers.append('Accept','application/json');
 
-    return this.http.get(this.riddleApi + personId, { headers: headers });
+    return this.http.get(this.hasRiddleApi + personId, { headers: headers });
   }
 
   answerRiddle(answers: string[]) {

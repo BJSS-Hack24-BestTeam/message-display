@@ -28,6 +28,8 @@ export class HomePage {
     private personalMessageProvider: PersonalMessageProvider,
     private riddleProvider: RiddleProvider,
     private objectProvider: ObjectProvider) {
+
+      
   }
 
   ionViewDidLoad() {
@@ -66,7 +68,7 @@ export class HomePage {
 
               this.riddleProvider.hasRiddle(personId).subscribe((res) => {
 
-                const hasRiddle = (res == 'true');
+                const hasRiddle = !!res;
 
                 if (hasRiddle) {
                   this.objectProvider.getObjects()
@@ -76,7 +78,7 @@ export class HomePage {
 
                       this.riddleProvider.answerRiddle(this.easterEggTags).subscribe((res) => {
                         
-                        const correctAnswer = (res == 'true'); 
+                        const correctAnswer = !!res;
 
                         if (correctAnswer) {
                           this.easterEggResults = "Yeah, you got it right!";
